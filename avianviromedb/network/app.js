@@ -51,6 +51,10 @@ function nodeHover(info, ids) {
 }
 
 function moduleName(id) { return id === 44 ? 'VCX · Module 44' : id < 0 ? 'No assigned module' : `Module ${id}`; }
+function countNote(id) {
+  const note = `Edge counts use the ${fmt(nodes.edges)} edges drawn in Fig. 6b.`;
+  return id === 44 ? `${note} Table S9 counts VCX edges in the vConTACT3 network that defined the modules: 25,590 to catalog vOTUs in other modules and 156 to RefSeq genomes.` : note;
+}
 
 function createLayers() {
   nodeLayer = new ScatterplotLayer({...common, id: 'nodes',
@@ -177,6 +181,7 @@ function inspect() {
   if (selectionResult) {
     panel.append(element('p', `${fmt(selectionResult.source.length / 2)} incident edges · ${fmt(neighbors.size)} neighboring nodes`, 'muted'),
       element('p', `${fmt(selectionResult.internalCount)} within-module · ${fmt(selectionResult.externalCount)} between-module edges`, 'muted'));
+    if (selection.kind === 'mod') panel.append(element('p', countNote(selection.id), 'muted'));
     panel.append(element('h3', 'Top neighboring modules'));
     const list = element('ul', undefined, 'neighbors');
     for (const [id, count] of selectionResult.shared.slice(0, 10)) {
